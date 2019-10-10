@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+}
+
+group 'com.frozenapuri'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+// Enable JUnit 5
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.0'
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.603'
+
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    // JUnit5 support
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+// Copies the runtime dependencies to libs
+task copyToLib(type: Copy) {
+    into "${buildDir}/libs"
+    from configurations.runtime
+}
+build.dependsOn(copyToLib)
+
+// Builds manifest file to include other libs
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'com.frozenapuri.minecraftcosmos.docker.Main'
+        )
+    }
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
