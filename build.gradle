@@ -22,9 +22,7 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.0'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.603'
-
-    compileOnly 'org.projectlombok:lombok:1.18.8'
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    compile 'io.github.microutils:kotlin-logging:1.7.6'
 
     // JUnit5 support
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
@@ -44,7 +42,7 @@ jar {
     manifest {
         attributes(
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'com.frozenapuri.minecraftcosmos.docker.MinecraftCosmos'
+                'Main-Class': 'com.frozenapuri.minecraftcosmos.docker.MinecraftCosmosKt'
         )
     }
 }
